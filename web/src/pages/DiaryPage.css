@@ -1,0 +1,124 @@
+.diary-container {
+  padding: 20px 20px 20px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #fdf4ec;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.diary-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+  color: #6c4f3d;
+  margin-bottom: 10px;
+}
+
+/* 날짜 네비게이션 */
+.date-navigation {
+  position: relative;
+  width: 160px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.diary-date {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: #6c4f3d;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.arrow-button {
+  position: absolute;
+  top: 0;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #6c4f3d;
+  cursor: pointer;
+}
+
+.arrow-button.left {
+  left: 0;
+}
+
+.arrow-button.right {
+  right: 0;
+}
+
+.calendar-input {
+  font-size: 0.95rem;
+  border: 1px solid #c7a183;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fffaf4;
+}
+
+/* 작성 영역 */
+.diary-form {
+  background-color: #f2e1c3;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.diary-input {
+  border: none;
+  border-bottom: 1px solid #6c4f3d;
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+  background: none;
+  outline: none;
+}
+
+.diary-textarea {
+  border: none;
+  background: none;
+  resize: none;
+  min-height: 150px;
+  font-size: 15px;
+  padding: 10px;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn.temp {
+  background-color: #a89f94;
+  color: white;
+}
+
+.btn.submit {
+  background-color: #c7a183;
+  color: white;
+}
