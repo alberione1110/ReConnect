@@ -19,7 +19,6 @@ const HomePage = () => {
   const adjustDate = (days) => {
     const newDate = new Date(selectedDate);
     newDate.setDate(newDate.getDate() + days);
-    // 오늘보다 미래로는 못 가게 제한
     if (newDate > today) return;
     setSelectedDate(newDate);
   };
@@ -32,6 +31,27 @@ const HomePage = () => {
         <h1 className="main-slogan">Start with a diary.<br />shift your day.</h1>
         <button className="btn big" onClick={goToDiaryPage}>일기 작성</button>
 
+        {/* 즐겨찾기 일기 섹션 */}
+        <section className="section">
+          <h3 className="section-title">최근 일기</h3>
+          <div className="favorite-scroll-container">
+            <div className="favorite-item">이어쓰기 &gt;</div>
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+            <div className="favorite-item" />
+          </div>
+        </section>
+
+        {/* 과거 일기 섹션 */}
         <section className="section">
           <h3 className="section-title">과거 일기</h3>
           <div className="past-diary">
