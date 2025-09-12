@@ -1,0 +1,378 @@
+{
+  "programName": "36-Day Couple Q&A",
+  "version": 1,
+  "programStartDate": null,
+  "participants": {
+    "A": null,
+    "B": null
+  },
+  "days": [
+    {
+      "day": 1,
+      "questionId": "q01",
+      "question": "오늘 나는 당신에게 어떤 점에서 고마웠나요?",
+      "tags": ["감사", "일상"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 2,
+      "questionId": "q02",
+      "question": "요즘 가장 크게 신경 쓰이는 일이 무엇인가요?",
+      "tags": ["스트레스", "공감"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 3,
+      "questionId": "q03",
+      "question": "우리가 함께하면 에너지가 생기는 활동은 무엇인가요?",
+      "tags": ["취미", "활동"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 4,
+      "questionId": "q04",
+      "question": "최근에 나를 웃게 만든 당신의 말/행동은 무엇이었나요?",
+      "tags": ["긍정", "유머"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 5,
+      "questionId": "q05",
+      "question": "서로에게 더 솔직해지려면 무엇이 필요할까요?",
+      "tags": ["소통", "신뢰"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 6,
+      "questionId": "q06",
+      "question": "내가 기대는 방식(정서적 지지)에 대해 어떻게 느끼나요?",
+      "tags": ["정서지지", "기대기"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 7,
+      "questionId": "q07",
+      "question": "우리가 다투었을 때 가장 힘들었던 점은 무엇이었나요?",
+      "tags": ["갈등", "회고"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 8,
+      "questionId": "q08",
+      "question": "다툼을 줄이기 위해 다음 주 실천할 한 가지는?",
+      "tags": ["갈등해결", "실천"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 9,
+      "questionId": "q09",
+      "question": "당신이 느끼는 나의 장점 2가지와 이유는?",
+      "tags": ["강점", "인정"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 10,
+      "questionId": "q10",
+      "question": "서로의 차이를 더 잘 존중하려면 무엇이 필요할까요?",
+      "tags": ["다름존중", "태도"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 11,
+      "questionId": "q11",
+      "question": "우리 관계에서 경계(지켜줬으면 하는 선)는 무엇인가요?",
+      "tags": ["경계", "존중"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 12,
+      "questionId": "q12",
+      "question": "서로의 하루 루틴에서 이해받고 싶은 부분은?",
+      "tags": ["일상", "이해"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 13,
+      "questionId": "q13",
+      "question": "사랑을 느끼는 순간(러브랭귀지)은 언제인가요?",
+      "tags": ["애정표현", "러브랭귀지"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 14,
+      "questionId": "q14",
+      "question": "함께 만들고 싶은 작은 주간 습관은?",
+      "tags": ["루틴", "행동변화"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 15,
+      "questionId": "q15",
+      "question": "서로에 대한 오해를 풀고 싶은 점이 있나요?",
+      "tags": ["오해해소", "대화"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 16,
+      "questionId": "q16",
+      "question": "돈과 시간 사용에서 가장 중요하게 생각하는 가치는?",
+      "tags": ["가치관", "재무/시간"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 17,
+      "questionId": "q17",
+      "question": "서로의 가족/친구와의 관계에서 바라는 점은?",
+      "tags": ["관계망", "기대"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 18,
+      "questionId": "q18",
+      "question": "요즘 내가 가장 두려워하는 것은 무엇인가요?",
+      "tags": ["불안", "취약성"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 19,
+      "questionId": "q19",
+      "question": "당신이 느끼는 '우리 팀워크'의 강점은?",
+      "tags": ["팀워크", "협력"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 20,
+      "questionId": "q20",
+      "question": "의견이 다를 때 대화의 규칙을 하나 정하자면?",
+      "tags": ["대화규칙", "갈등예방"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 21,
+      "questionId": "q21",
+      "question": "서로의 목표를 응원하는 구체적 방법은?",
+      "tags": ["목표", "응원"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 22,
+      "questionId": "q22",
+      "question": "힘든 날, 어떤 말/행동이 가장 위로가 되나요?",
+      "tags": ["위로", "케어"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 23,
+      "questionId": "q23",
+      "question": "최근 관계에서 작게나마 성장했다고 느낀 점은?",
+      "tags": ["성장", "반성"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 24,
+      "questionId": "q24",
+      "question": "우리만의 기념일/의식으로 만들고 싶은 것은?",
+      "tags": ["의식", "기념일"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 25,
+      "questionId": "q25",
+      "question": "서로의 경청 습관을 점수로 매긴다면(10점 만점)? 이유는?",
+      "tags": ["경청", "피드백"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 26,
+      "questionId": "q26",
+      "question": "함께 배우거나 도전해보고 싶은 것이 있나요?",
+      "tags": ["도전", "공동학습"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 27,
+      "questionId": "q27",
+      "question": "디지털/연락 습관에서 합의하고 싶은 규칙은?",
+      "tags": ["연락", "디지털경계"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 28,
+      "questionId": "q28",
+      "question": "당신이 느끼는 나의 '관계에서의 약점'은? (개선 아이디어 포함)",
+      "tags": ["약점", "개선"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 29,
+      "questionId": "q29",
+      "question": "가장 기억에 남는 우리의 순간은? 왜 특별했나요?",
+      "tags": ["추억", "의미"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 30,
+      "questionId": "q30",
+      "question": "서로에게 안전하다고 느끼는 이유는 무엇인가요?",
+      "tags": ["안전감", "신뢰"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 31,
+      "questionId": "q31",
+      "question": "장기적으로 함께 그리고 싶은 삶의 그림은?",
+      "tags": ["미래상", "비전"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 32,
+      "questionId": "q32",
+      "question": "서로에게 지키고 싶은 약속 한 가지는?",
+      "tags": ["약속", "헌신"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 33,
+      "questionId": "q33",
+      "question": "갈등 후 회복을 빠르게 만드는 나만의 방법은?",
+      "tags": ["회복탄력", "리페어"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 34,
+      "questionId": "q34",
+      "question": "서로에게 더 자주 듣고 싶은 말은 무엇인가요?",
+      "tags": ["언어적지지", "표현"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 35,
+      "questionId": "q35",
+      "question": "함께 바꾸고 싶은 생활 패턴/습관이 있나요?",
+      "tags": ["습관변화", "건강한관계"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    },
+    {
+      "day": 36,
+      "questionId": "q36",
+      "question": "36일간 가장 크게 달라진 점은 무엇이라고 느끼나요?",
+      "tags": ["종합", "마무리"],
+      "answers": { "A": null, "B": null },
+      "submittedAt": { "A": null, "B": null },
+      "dailyReport": null,
+      "completed": false
+    }
+  ],
+  "finalReport": {
+    "generatedAt": null,
+    "summary": null,
+    "highlights": [],
+    "growthAreas": [],
+    "suggestedRoutines": []
+  }
+}
