@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Header from "../components/Header";
 import "./LoginPage.css";
 
@@ -8,27 +7,28 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const goToSignup = () => navigate("/signup");
 
+  // 백엔드 호출 제거: 간단한 클라이언트 검증 + 성공 이동만 수행
   const handleLogin = async () => {
+    setMsg("");
+    if (!userId.trim() || !password.trim()) {
+      setMsg("아이디와 비밀번호를 입력하세요.");
+      return;
+    }
     try {
-      const response = await axios.post("http://localhost:8080/api/user/login", {
-        userId,
-        password,
-      });
-
-      // 로그인 성공 시 토큰 저장 (있다면)
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
-
-      // 로그인 성공 시 이동
-      alert("로그인 성공");
-      navigate("/diary"); // 또는 원하는 페이지로 이동
-    } catch (error) {
-      console.error("로그인 실패", error);
-      alert("로그인 실패: " + (error.response?.data?.message || "서버 오류"));
+      setLoading(true);
+      // 실제 API 호출 대신 약간의 지연을 주어 UX 유지
+      await new Promise((r) => setTimeout(r, 500));
+      alert("로그인(모의) 성공");
+      navigate("/diary");
+    } catch (e) {
+      setMsg("알 수 없는 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,14 +58,24 @@ const LoginPage = () => {
             placeholder="비밀번호"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
           />
+
+          {msg && <div className="auth-error" role="alert">{msg}</div>}
 
           <div className="auth-links">
             <span className="auth-link">아이디 찾기</span>
             <span className="auth-link">비밀번호 찾기</span>
           </div>
 
-          <button className="auth-submit" onClick={handleLogin}>로그인</button>
+          <button
+            className="auth-submit"
+            onClick={handleLogin}
+            disabled={loading}
+            aria-busy={loading}
+          >
+            {loading ? "로그인 중..." : "로그인"}
+          </button>
 
           <div className="auth-divider">
             <span className="auth-divider-text">or</span>

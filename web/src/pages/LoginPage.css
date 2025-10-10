@@ -24,6 +24,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
+.auth-error {
+  color: #b91c1c; /* 진한 레드 */
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
 .auth-header {
   display: flex;
   justify-content: space-between;

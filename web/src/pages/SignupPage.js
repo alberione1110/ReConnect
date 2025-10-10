@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 추가
 import Header from "../components/Header";
-import axios from "axios";
+// axios 제거
 import "./SignupPage.css";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -13,34 +16,29 @@ const SignupPage = () => {
   const [birthDay, setBirthDay] = useState("");
   const [job, setJob] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(true); // 기본값 true
+  const [msg, setMsg] = useState(""); // 오류 메시지 표시용
 
   const handleSignup = async () => {
-    // 유효성 검사
-    if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
+    setMsg("");
 
-    const birthDate = `${birthYear}-${birthMonth.padStart(2, "0")}-${birthDay.padStart(2, "0")}`;
+    // 간단 유효성 검사
+    if (!userId.trim()) return setMsg("아이디(이메일)를 입력하세요.");
+    if (!password.trim()) return setMsg("비밀번호를 입력하세요.");
+    if (password !== passwordConfirm) return setMsg("비밀번호가 일치하지 않습니다.");
+    if (!name.trim()) return setMsg("이름을 입력하세요.");
+    if (!birthYear || !birthMonth || !birthDay) return setMsg("생년월일을 모두 선택하세요.");
 
-    try {
-      const res = await axios.post("http://localhost:8080/api/user/save", {
-        userId,
-        password,
-        passwordConfirm,
-        name,
-        birthDate,
-        job,
-        isSubscribed,
-      });
+    const birthDate = `${birthYear}-${String(birthMonth).padStart(2, "0")}-${String(birthDay).padStart(2, "0")}`;
 
-      alert("회원가입 성공!");
-      console.log(res.data);
-      // 필요시 로그인 페이지로 이동
-    } catch (error) {
-      console.error("회원가입 실패", error);
-      alert("회원가입 실패: " + (error.response?.data?.message || "서버 오류"));
-    }
+    // 실제 API 호출 대신 모의 처리
+    await new Promise((r) => setTimeout(r, 400)); // UX용 짧은 지연
+    alert("회원가입(모의) 성공!");
+
+    // 필요 시 로컬 스토리지 등 임시 저장 가능 (원치 않으면 제거)
+    // localStorage.setItem("mock_user", JSON.stringify({ userId, name, birthDate, job, isSubscribed }));
+
+    // 회원가입 후 로그인 페이지로 이동
+    navigate("/login");
   };
 
   return (
@@ -75,6 +73,7 @@ const SignupPage = () => {
             placeholder="비밀번호 재입력"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleSignup(); }}
           />
 
           <label className="auth-label">이름</label>
@@ -126,6 +125,9 @@ const SignupPage = () => {
               &nbsp; 뉴스레터 구독
             </label>
           </div>
+
+          {/* 오류 메시지 */}
+          {msg && <div className="auth-error" role="alert">{msg}</div>}
 
           <button className="auth-submit" onClick={handleSignup}>회원가입</button>
         </div>

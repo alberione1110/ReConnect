@@ -1,0 +1,67 @@
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffe6dc; /* 부드러운 살구색 */
+  font-family: 'Pretendard', sans-serif;
+  padding: 0 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.landing-logo {
+  font-family: 'Pacifico', cursive; /* 손글씨 느낌 폰트 */
+  font-size: 52px;
+  color: #6c4f3d;
+  margin-bottom: 12px;
+}
+
+.landing-subtitle {
+  font-size: 20px;
+  color: #884c24;
+  margin-bottom: 40px;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* 로그인 버튼 */
+.btn.primary {
+  background-color: #884c24;
+  color: white;
+}
+.btn.primary:hover {
+  background-color: #6c3b1c;
+}
+
+/* 회원가입 버튼 */
+.btn.secondary {
+  background-color: #fff;
+  border: 2px solid #884c24;
+  color: #884c24;
+}
+.btn.secondary:hover {
+  background-color: #f5ebe3;
+}
+
+/* 개발자 루트 버튼 */
+.btn.dev {
+  background-color: #4b9cd3;
+  color: white;
+}
+.btn.dev:hover {
+  background-color: #3578a8;
+}
