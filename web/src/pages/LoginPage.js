@@ -12,7 +12,6 @@ const LoginPage = () => {
 
   const goToSignup = () => navigate("/signup");
 
-  // 백엔드 호출 제거: 간단한 클라이언트 검증 + 성공 이동만 수행
   const handleLogin = async () => {
     setMsg("");
     if (!userId.trim() || !password.trim()) {
@@ -21,10 +20,14 @@ const LoginPage = () => {
     }
     try {
       setLoading(true);
-      // 실제 API 호출 대신 약간의 지연을 주어 UX 유지
       await new Promise((r) => setTimeout(r, 500));
-      alert("로그인(모의) 성공");
-      navigate("/diary");
+
+      // ✅ 로그인 성공 시 토큰 저장 (임시)
+      localStorage.setItem("token", "mock-token");
+      localStorage.setItem("userId", userId);
+
+      alert("로그인 성공");
+      navigate("/home");
     } catch (e) {
       setMsg("알 수 없는 오류가 발생했습니다.");
     } finally {
@@ -34,13 +37,16 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <Header showAuthButtons={false} />
+      {/* 로그인/회원가입 페이지는 인증 검증 안함 */}
+      <Header requireAuth={false} showLogout={false} />
 
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
             <h2 className="auth-title">로그인</h2>
-            <button className="auth-switch" onClick={goToSignup}>회원가입</button>
+            <button className="auth-switch" onClick={goToSignup}>
+              회원가입
+            </button>
           </div>
 
           <label className="auth-label">아이디</label>
@@ -58,10 +64,10 @@ const LoginPage = () => {
             placeholder="비밀번호"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
           />
 
-          {msg && <div className="auth-error" role="alert">{msg}</div>}
+          {msg && <div className="auth-error">{msg}</div>}
 
           <div className="auth-links">
             <span className="auth-link">아이디 찾기</span>
@@ -72,7 +78,6 @@ const LoginPage = () => {
             className="auth-submit"
             onClick={handleLogin}
             disabled={loading}
-            aria-busy={loading}
           >
             {loading ? "로그인 중..." : "로그인"}
           </button>
@@ -87,7 +92,11 @@ const LoginPage = () => {
         </div>
 
         <div className="auth-quote">
-          <p>Start with a diary.<br />shift your day.</p>
+          <p>
+            Start with a diary.
+            <br />
+            shift your day.
+          </p>
         </div>
       </div>
     </div>

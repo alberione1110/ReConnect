@@ -20,9 +20,6 @@ const LandingPage = () => {
           <button className="btn secondary" onClick={() => navigate('/signup')}>
             회원가입
           </button>
-          <button className="btn dev" onClick={() => navigate('/home')}>
-            개발자 루트
-          </button>
         </div>
       </div>
     </div>

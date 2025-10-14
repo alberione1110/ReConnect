@@ -2,25 +2,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   background-color: #f7f0e8;
+  color: #884c24;
   font-family: 'Pretendard', sans-serif;
+  border-bottom: none;
+  box-shadow: none;
 }
 
 .header-logo {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #6c4f3d;
+  font-size: 1.4rem;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.btn.small {
-  padding: 6px 12px;
-  font-size: 16px;
-  background-color: #c7a183;
+.header-actions .btn.small {
+  margin-left: 0.5rem;
+  background-color: #cc9966;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
   cursor: pointer;
-  margin-left: 12px;
+}
+
+.header-actions .btn.small:hover {
+  background-color: #b8834f;
 }

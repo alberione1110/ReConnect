@@ -1,32 +1,58 @@
+/* --- 전역 여백 리셋 (이 파일이 전역으로 import되므로 여기서 잡아줍니다) --- */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+}
+
+/* 페이지 전체를 정확히 중앙 배치 */
 .landing-container {
+  position: fixed;      /* 부모의 패딩/레이아웃 영향 제거 */
+  inset: 0;             /* top/right/bottom/left = 0 */
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   background-color: #ffe6dc; /* 부드러운 살구색 */
   font-family: 'Pretendard', sans-serif;
-  padding: 0 20px;
-  box-sizing: border-box;
   text-align: center;
+  /* 혹시 상위에서 padding 주입됐을 경우 차단 */
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+/* 컨텐츠 블록 자체도 가운데 고정 */
+.landing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* 자식 가로 중앙 */
+  justify-content: center;
+  width: fit-content;    /* 내용만큼만 너비 */
+  max-width: 90vw;       /* 너무 넓어지지 않게 */
+  margin: 0;             /* 좌/우 쏠림 방지 */
 }
 
 .landing-logo {
   font-family: 'Pacifico', cursive; /* 손글씨 느낌 폰트 */
   font-size: 52px;
   color: #6c4f3d;
-  margin-bottom: 12px;
+  margin: 0 0 12px;  /* 기본 h1 margin 제거 */
+  line-height: 1.2;
 }
 
 .landing-subtitle {
   font-size: 20px;
   color: #884c24;
-  margin-bottom: 40px;
+  margin: 0 0 40px;
 }
 
+/* 버튼 줄을 정확히 중앙 정렬 */
 .button-group {
   display: flex;
+  justify-content: center;  /* 가로 중앙 */
+  align-items: center;
   gap: 16px;
+  flex-wrap: wrap;          /* 좁은 화면에서 줄바꿈 */
+  width: auto;              /* 내용만큼만 */
+  margin: 0;                /* 좌/우 쏠림 방지 */
 }
 
 .btn {
@@ -57,11 +83,9 @@
   background-color: #f5ebe3;
 }
 
-/* 개발자 루트 버튼 */
-.btn.dev {
-  background-color: #4b9cd3;
-  color: white;
-}
-.btn.dev:hover {
-  background-color: #3578a8;
+/* 반응형: 작은 화면에서 폰트/간격 튜닝 */
+@media (max-width: 480px) {
+  .landing-logo { font-size: 44px; }
+  .landing-subtitle { font-size: 18px; margin-bottom: 28px; }
+  .button-group { gap: 12px; }
 }
