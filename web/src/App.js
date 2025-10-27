@@ -1,31 +1,34 @@
-// App.js
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './pages/LandingPage'; // 새로 만든 랜딩 페이지
+import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import QuestionPage from './pages/QuestionPage';
 import ReportPage from './pages/ReportPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import InitialSurveyPage from './pages/InitialSurveyPage'; // ✅ 추가
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 첫 진입은 랜딩 페이지 */}
+        {/* 랜딩 */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* 인증 관련 */}
+        {/* 인증 */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
-        {/* 로그인 성공 시 접근할 메인 서비스 페이지 */}
+        {/* 서비스 */}
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/report" element={<ReportPage />} />
+
+        {/* ✅ 초기 설문 */}
+        <Route path="/survey" element={<InitialSurveyPage />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;

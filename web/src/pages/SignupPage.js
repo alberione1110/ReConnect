@@ -1,10 +1,13 @@
+// src/pages/SignupPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { signUp } from "../services/reconnect";
 import "./SignupPage.css";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -15,27 +18,51 @@ const SignupPage = () => {
   const [job, setJob] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
     setMsg("");
-    if (!userId.trim()) return setMsg("아이디(이메일)를 입력하세요.");
+    const id = userId.trim();
+    if (!id) return setMsg("아이디(이메일)를 입력하세요.");
     if (!password.trim()) return setMsg("비밀번호를 입력하세요.");
-    if (password !== passwordConfirm) return setMsg("비밀번호가 일치하지 않습니다.");
+    if (password !== passwordConfirm)
+      return setMsg("비밀번호가 일치하지 않습니다.");
     if (!name.trim()) return setMsg("이름을 입력하세요.");
-    if (!birthYear || !birthMonth || !birthDay) return setMsg("생년월일을 모두 선택하세요.");
+    if (!birthYear || !birthMonth || !birthDay)
+      return setMsg("생년월일을 모두 선택하세요.");
 
-    const birthDate = `${birthYear}-${String(birthMonth).padStart(2, "0")}-${String(birthDay).padStart(2, "0")}`;
+    const birthDate = `${birthYear}-${String(birthMonth).padStart(
+      2,
+      "0"
+    )}-${String(birthDay).padStart(2, "0")}`;
 
-    await new Promise((r) => setTimeout(r, 400));
-    alert("회원가입 성공!");
-
-    // 가입 후 로그인 페이지로 이동
-    navigate("/login");
+    try {
+      setLoading(true);
+      await signUp({
+        userId: id,
+        password,
+        passwordConfirm, // ✅ 추가: 백엔드 검증 일치용
+        name,
+        birthDate,
+        job,
+        isSubscribed,
+      });
+      alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+      navigate("/login", { replace: true });
+    } catch (e) {
+      const errMsg =
+        e?.response?.data?.message ||
+        e?.response?.data ||
+        e?.message ||
+        "회원가입 중 오류가 발생했습니다.";
+      setMsg(errMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="signup-page">
-      {/* 회원가입 페이지는 인증 검증 안함 */}
       <Header requireAuth={false} showLogout={false} />
 
       <div className="auth-container">
@@ -79,7 +106,11 @@ const SignupPage = () => {
 
           <label className="auth-label">생년월일</label>
           <div className="auth-birth-row">
-            <select className="auth-select" value={birthYear} onChange={(e) => setBirthYear(e.target.value)}>
+            <select
+              className="auth-select"
+              value={birthYear}
+              onChange={(e) => setBirthYear(e.target.value)}
+            >
               <option value="">년도</option>
               {Array.from({ length: 100 }, (_, i) => 2025 - i).map((year) => (
                 <option key={year} value={year}>
@@ -87,7 +118,11 @@ const SignupPage = () => {
                 </option>
               ))}
             </select>
-            <select className="auth-select" value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)}>
+            <select
+              className="auth-select"
+              value={birthMonth}
+              onChange={(e) => setBirthMonth(e.target.value)}
+            >
               <option value="">월</option>
               {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                 <option key={month} value={month}>
@@ -95,7 +130,11 @@ const SignupPage = () => {
                 </option>
               ))}
             </select>
-            <select className="auth-select" value={birthDay} onChange={(e) => setBirthDay(e.target.value)}>
+            <select
+              className="auth-select"
+              value={birthDay}
+              onChange={(e) => setBirthDay(e.target.value)}
+            >
               <option value="">일</option>
               {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
                 <option key={day} value={day}>
@@ -106,7 +145,11 @@ const SignupPage = () => {
           </div>
 
           <label className="auth-label">직업</label>
-          <select className="auth-select full" value={job} onChange={(e) => setJob(e.target.value)}>
+          <select
+            className="auth-select full"
+            value={job}
+            onChange={(e) => setJob(e.target.value)}
+          >
             <option value="">직업 선택</option>
             <option value="학생">학생</option>
             <option value="직장인">직장인</option>
@@ -127,8 +170,12 @@ const SignupPage = () => {
 
           {msg && <div className="auth-error">{msg}</div>}
 
-          <button className="auth-submit" onClick={handleSignup}>
-            회원가입
+          <button
+            className="auth-submit"
+            onClick={handleSignup}
+            disabled={loading}
+          >
+            {loading ? "가입 중..." : "회원가입"}
           </button>
         </div>
 

@@ -1,194 +1,140 @@
-import React, { useEffect, useMemo, useState } from "react";
+// src/pages/HomePage.js
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { getNextQuestionNumber, getDiaryDaily } from "../services/reconnect";
+import {
+  getNextQuestionNumberSafe,
+  getDiaryDaily,
+  getMySurveySafe,
+} from "../services/reconnect";
 import "./HomePage.css";
-
-const LS_COUPLE = "coupleCode";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [questions, setQuestions] = useState([]);
-  const [coupleCode, setCoupleCode] = useState(
-    localStorage.getItem(LS_COUPLE) || ""
+  const [nextQuestion, setNextQuestion] = useState(null);
+  const [recentAnswers, setRecentAnswers] = useState([]);
+  const [surveyCompleted, setSurveyCompleted] = useState(
+    localStorage.getItem("surveyCompleted") === "true"
   );
-  const [nextQ, setNextQ] = useState(null);
-  const [recent, setRecent] = useState([]);
 
-  const userId = useMemo(() => localStorage.getItem("userId") || "", []);
+  const userId = localStorage.getItem("userId");
+  const coupleCode = localStorage.getItem("coupleCode");
 
-  // 📘 질문 텍스트 로드
+  // ✅ 설문 완료 여부 + 오늘의 질문/최근 답변 불러오기
   useEffect(() => {
     let alive = true;
+
     (async () => {
       try {
-        const res = await fetch("/questions36.json", { cache: "no-cache" });
-        const data = await res.json();
-        if (!alive) return;
-        if (Array.isArray(data)) {
-          setQuestions(data);
-        } else if (Array.isArray(data?.days)) {
-          setQuestions(
-            data.days.map((d) => ({ id: d.day, question: d.question }))
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  // 📘 다음 질문 번호 + 최근 답변 불러오기
-  useEffect(() => {
-    let alive = true;
-    async function load() {
-      if (!userId || !coupleCode) {
-        setLoading(false);
-        return;
-      }
-      try {
         setLoading(true);
-        const { data: nextData } = await getNextQuestionNumber(coupleCode);
-        const nextNumber = nextData?.nextQuestionNumber ?? 1;
-        if (!alive) return;
-        setNextQ(nextNumber);
 
-        const toCheck = [];
-        for (let q = Math.max(1, nextNumber - 8); q < nextNumber; q++) {
-          toCheck.push(q);
+        // 설문 완료 여부: 백엔드 기준 우선
+        let done = false;
+        try {
+          const data = await getMySurveySafe();
+          done = !!data;
+        } catch { /* 네트워크 오류면 로컬 캐시 그대로 사용 */ }
+
+        if (!done && localStorage.getItem("surveyCompleted") === "true") {
+          done = true;
         }
-        toCheck.reverse();
+        if (!alive) return;
+        setSurveyCompleted(done);
 
-        const items = [];
-        for (const qNum of toCheck) {
+        // 설문 미완료면 다음 질문/최근답변은 로딩하지 않음
+        if (!done || !userId || !coupleCode) {
+          setLoading(false);
+          return;
+        }
+
+        const qNum = await getNextQuestionNumberSafe(coupleCode);
+        if (!alive) return;
+        setNextQuestion(qNum);
+
+        // 최근 5개
+        const answers = [];
+        for (let i = Math.max(1, qNum - 5); i < qNum; i++) {
           try {
-            const { data } = await getDiaryDaily(userId, coupleCode, qNum);
-            const content = (data?.content ?? "").toString().trim();
-            if (content) {
-              const qt =
-                questions.find((x) => Number(x.id) === Number(qNum))?.question ||
-                `질문 #${qNum}`;
-              const preview =
-                content.replace(/\s+/g, " ").slice(0, 60) +
-                (content.length > 60 ? "…" : "");
-              items.push({
-                day: qNum,
-                question: qt,
-                preview,
-                submittedAt: data?.submittedAt || null,
+            const { data } = await getDiaryDaily(userId, coupleCode, i);
+            if (data?.content) {
+              answers.push({
+                day: i,
+                content: data.content,
+                submittedAt: data.submittedAt,
               });
             }
-          } catch {
-            /* no-op */
-          }
+          } catch {}
         }
-        if (!alive) return;
-        setRecent(items.sort((a, b) => b.day - a.day));
+        setRecentAnswers(answers.reverse());
       } finally {
         if (alive) setLoading(false);
       }
-    }
-    load();
+    })();
+
     return () => {
       alive = false;
     };
-  }, [userId, coupleCode, questions]);
+  }, [userId, coupleCode]);
 
-  // 📘 오늘의 질문으로 이동
-  const goToTodayQuestion = () => {
-    navigate("/question");
+  const handlePrimary = () => {
+    if (!surveyCompleted) {
+      navigate("/survey");
+    } else {
+      navigate("/question");
+    }
   };
 
-  // 📘 특정 문항 열기
-  const openDay = (dayNumber) => {
-    navigate("/question", { state: { questionNumber: dayNumber } });
-  };
-
-  // 📘 커플 코드 입력
-  const onChangeCouple = (e) => {
-    const v = e.target.value.trim();
-    setCoupleCode(v);
-    localStorage.setItem(LS_COUPLE, v);
-  };
+  const primaryLabel = !surveyCompleted
+    ? "초기 설문 시작하기"
+    : nextQuestion
+    ? `오늘의 질문 (DAY ${nextQuestion})`
+    : "오늘의 질문 불러오는 중...";
 
   return (
     <div className="home-container">
       <Header />
-
       <main className="main-content">
         <h1 className="main-slogan">
           하루 한 질문, 서로의 마음이 가까워지는 36일
         </h1>
         <p className="sub-slogan">
-          오늘의 질문에 답하고, 서로를 더 깊이 이해해보세요.
+          {surveyCompleted
+            ? "오늘의 질문에 답하고, 서로를 더 깊이 이해해보세요."
+            : "먼저 초기 설문으로 현재 성향을 알아봐요."}
         </p>
-
-        <div style={{ marginBottom: 12 }}>
-          <input
-            value={coupleCode}
-            onChange={onChangeCouple}
-            placeholder="커플 코드"
-            style={{
-              padding: "8px 12px",
-              borderRadius: 8,
-              border: "1px solid #cdb6a4",
-              background: "#fff",
-              minWidth: 180,
-              textAlign: "center",
-            }}
-          />
-        </div>
 
         <button
           className="btn big"
-          onClick={goToTodayQuestion}
-          disabled={!coupleCode}
+          onClick={handlePrimary}
+          disabled={!userId || !coupleCode}
         >
-          {nextQ
-            ? `오늘의 질문으로 가기 (다음: #${nextQ})`
-            : "오늘의 질문으로 가기"}
+          {primaryLabel}
         </button>
 
-        <section className="section">
-          <h3 className="section-title">최근 질문</h3>
-
-          {loading ? (
-            <div className="empty-hint">불러오는 중…</div>
-          ) : recent.length === 0 ? (
-            <div className="empty-hint">
-              아직 작성한 답변이 없어요. 오늘의 질문부터 시작해볼까요?
-            </div>
-          ) : (
-            <div className="favorite-scroll-container">
-              {recent.map((item) => (
-                <div
-                  key={item.day}
-                  className="favorite-item q-card"
-                  onClick={() => openDay(item.day)}
-                  title={`DAY ${item.day} 이동`}
-                >
-                  <div className="day-chip">DAY {item.day}</div>
-                  <div className="q-title" title={item.question}>
-                    {item.question}
+        {surveyCompleted && (
+          <section className="section">
+            <h3 className="section-title">최근 답변</h3>
+            {loading ? (
+              <p className="empty-hint">불러오는 중...</p>
+            ) : recentAnswers.length === 0 ? (
+              <p className="empty-hint">아직 답변이 없습니다.</p>
+            ) : (
+              <div className="answer-list">
+                {recentAnswers.map((ans) => (
+                  <div key={ans.day} className="answer-item">
+                    <div className="day-chip">DAY {ans.day}</div>
+                    <p className="preview">
+                      {ans.content.slice(0, 50)}
+                      {ans.content.length > 50 && "..."}
+                    </p>
                   </div>
-                  <div className="q-preview" title={item.preview}>
-                    {item.preview}
-                  </div>
-                  {item.submittedAt ? (
-                    <div className="q-meta">
-                      {new Date(item.submittedAt).toLocaleDateString()}
-                    </div>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
       </main>
     </div>
   );
