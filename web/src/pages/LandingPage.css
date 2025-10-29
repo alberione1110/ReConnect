@@ -11,7 +11,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffe6dc; /* 부드러운 살구색 */
+  background-color: #f7f0e8; /* 부드러운 살구색 */
   font-family: 'Pretendard', sans-serif;
   text-align: center;
   /* 혹시 상위에서 padding 주입됐을 경우 차단 */

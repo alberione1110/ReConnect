@@ -1,7 +1,8 @@
+// src/pages/LoginPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { login, getUser, signUp } from "../services/reconnect"; // ✅ signUp도 import
+import { login, getMySurveySafe } from "../services/reconnect"; // ← 설문 확인 추가
 import "./LoginPage.css";
 
 const LoginPage = () => {
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const goToSignup = () => navigate("/signup");
 
   const handleLogin = async () => {
+    if (loading) return;
     setMsg("");
 
     const id = userId.trim();
@@ -26,48 +28,42 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-      // ✅ 실제 로그인 호출
-      const { data: loginData } = await login(id, pw);
-      const token = loginData?.token || "mock-token";
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", id);
+      // ✅ 세션 로그인 (JSESSIONID 설정). 응답은 UserDto
+      const { data: userDto } = await login(id, pw);
 
-      // ✅ 로그인 후 내 정보 조회 (id가 빈 값이면 호출하지 않음)
-      try {
-        const { data } = await getUser(id);
-        const code = data?.coupleCode || "";
-        if (code) {
-          localStorage.setItem("coupleCode", code);
-          navigate("/home", { replace: true });
-        } else {
-          navigate("/couple", { replace: true });
-        }
-      } catch (e) {
-        // 404면 유저가 없을 수 있으므로, 자동 회원가입 옵션
-        if (e?.response?.status === 404) {
-          try {
-            await signUp({
-              userId: id,
-              password: pw,
-              name: id,
-              birthDate: "1990-01-01",
-              job: "기타",
-              isSubscribed: true,
-            });
-            navigate("/couple", { replace: true });
-          } catch {
-            navigate("/couple", { replace: true });
-          }
-        } else {
-          navigate("/couple", { replace: true });
-        }
+      // ✅ 프론트 세션 마커
+      localStorage.setItem("userId", id);
+      localStorage.setItem("auth", "1");
+
+      // ✅ 응답에서 커플코드 확인
+      const coupleCode = userDto?.coupleCode || "";
+      if (!coupleCode) {
+        // 커플 연결 전이면 연결 페이지로
+        localStorage.removeItem("coupleCode");
+        navigate("/couple", { replace: true });
+        return;
+      }
+
+      // 커플코드 저장
+      localStorage.setItem("coupleCode", coupleCode);
+
+      // ✅ 설문 완료 여부 확인 -> 완료면 홈, 아니면 설문 페이지
+      const survey = await getMySurveySafe(); // 404면 null
+      if (survey) {
+        localStorage.setItem("surveyCompleted", "true");
+        navigate("/home", { replace: true });
+      } else {
+        localStorage.removeItem("surveyCompleted");
+        navigate("/survey", { replace: true });
       }
     } catch (e) {
-      const msg =
-        e?.response?.data?.message ||
-        (e?.response?.status === 401 ? "아이디 또는 비밀번호가 올바르지 않습니다." : null) ||
+      const status = e?.response?.status;
+      const backendMsg = e?.response?.data;
+      const m =
+        (status === 401 && "아이디 또는 비밀번호가 올바르지 않습니다.") ||
+        (typeof backendMsg === "string" ? backendMsg : null) ||
         "로그인 중 문제가 발생했습니다.";
-      setMsg(msg);
+      setMsg(m);
     } finally {
       setLoading(false);
     }
@@ -81,7 +77,7 @@ const LoginPage = () => {
         <div className="auth-card">
           <div className="auth-header">
             <h2 className="auth-title">로그인</h2>
-            <button className="auth-switch" onClick={goToSignup}>
+            <button className="auth-switch" onClick={goToSignup} disabled={loading}>
               회원가입
             </button>
           </div>
@@ -92,7 +88,8 @@ const LoginPage = () => {
             placeholder="아이디"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            onBlur={() => setUserId((v) => v.trim())}  // ✅ 공백 제거
+            onBlur={() => setUserId((v) => v.trim())}
+            disabled={loading}
           />
 
           <label className="auth-label">비밀번호</label>
@@ -103,9 +100,14 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            disabled={loading}
           />
 
-          {msg && <div className="auth-error" role="alert">{msg}</div>}
+          {msg && (
+            <div className="auth-error" role="alert">
+              {msg}
+            </div>
+          )}
 
           <div className="auth-links">
             <span className="auth-link">아이디 찾기</span>
@@ -120,13 +122,23 @@ const LoginPage = () => {
             <span className="auth-divider-text">or</span>
           </div>
 
-          <button className="auth-social google" disabled>Google로 로그인</button>
-          <button className="auth-social kakao" disabled>Kakao로 로그인</button>
-          <button className="auth-social naver" disabled>Naver로 로그인</button>
+          <button className="auth-social google" disabled>
+            Google로 로그인
+          </button>
+          <button className="auth-social kakao" disabled>
+            Kakao로 로그인
+          </button>
+          <button className="auth-social naver" disabled>
+            Naver로 로그인
+          </button>
         </div>
 
         <div className="auth-quote">
-          <p>Start with a diary.<br/>shift your day.</p>
+          <p>
+            Start with a diary.
+            <br />
+            shift your day.
+          </p>
         </div>
       </div>
     </div>

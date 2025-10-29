@@ -1,10 +1,11 @@
+// src/pages/CoupleConnectPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import {
-  getUser,            // GET /api/user/{userId}
-  issueCoupleCode,    // POST /api/user/{userId}/coupleCode
-  connectWithCoupleCode,    // POST /api/user/{userId}/connect?coupleCode=...
+  getUser,
+  issueCoupleCode,
+  connectWithCoupleCode,
 } from "../services/reconnect";
 
 const CoupleConnectPage = () => {
@@ -14,62 +15,76 @@ const CoupleConnectPage = () => {
   const [myCode, setMyCode] = useState("");
   const [partnerCode, setPartnerCode] = useState("");
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // 내 상태 조회: 이미 coupleCode 있으면 저장하고 홈으로
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         setLoading(true);
+        if (!userId) {
+          navigate("/login", { replace: true });
+          return;
+        }
         const { data } = await getUser(userId);
-        const code = data?.coupleCode || "";
-        const partnerId = data?.partnerId || data?.partner_id || null;
-
         if (!alive) return;
 
+        const code = data?.coupleCode || "";
         if (code) {
           localStorage.setItem("coupleCode", code);
-          // 파트너가 이미 연결돼 있어도/없어도 홈으로 (홈에서 진행 이어감)
           navigate("/home", { replace: true });
           return;
         }
       } catch (e) {
-        setMsg("내 정보를 불러오지 못했습니다.");
+        setMsg("내 정보를 불러오지 못했습니다. 다시 로그인해주세요.");
+        navigate("/login", { replace: true });
       } finally {
         if (alive) setLoading(false);
       }
     })();
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [navigate, userId]);
 
   const onIssue = async () => {
+    if (busy) return;
     setMsg("");
+    setBusy(true);
     try {
       const { data } = await issueCoupleCode(userId);
       const code = data?.coupleCode || data?.code || "";
       if (!code) throw new Error("코드 발급 실패");
       setMyCode(code);
-      localStorage.setItem("coupleCode", code);
+      localStorage.setItem("coupleCode", code); // ✅ 응답값 저장
       alert(`내 커플 코드가 발급되었습니다: ${code}`);
     } catch (e) {
-      setMsg(e?.response?.data?.message || "코드 발급 중 오류가 발생했습니다.");
+      setMsg(e?.response?.data || "코드 발급 중 오류가 발생했습니다.");
+    } finally {
+      setBusy(false);
     }
   };
 
   const onConnect = async () => {
+    if (busy) return;
     setMsg("");
-    if (!partnerCode.trim()) {
+    const code = partnerCode.trim();
+    if (!code) {
       setMsg("상대 커플 코드를 입력하세요.");
       return;
     }
+    setBusy(true);
     try {
-      await connectWithCoupleCode(userId, partnerCode.trim());
-      localStorage.setItem("coupleCode", partnerCode.trim());
+      const { data } = await connectWithCoupleCode(userId, code);
+      const saved = data?.coupleCode || code; // ✅ 서버 응답 우선
+      localStorage.setItem("coupleCode", saved);
       alert("연결되었습니다! 메인으로 이동합니다.");
       navigate("/home", { replace: true });
     } catch (e) {
-      setMsg(e?.response?.data?.message || "연결에 실패했습니다. 코드를 확인하세요.");
+      setMsg(e?.response?.data || "연결에 실패했습니다. 코드를 확인하세요.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -89,11 +104,15 @@ const CoupleConnectPage = () => {
       <Header />
       <main className="main-content" style={{ textAlign: "center" }}>
         <h1 className="main-slogan">커플 등록</h1>
-        <p className="sub-slogan">서로의 코드를 연결하면 프로그램을 시작할 수 있어요.</p>
+        <p className="sub-slogan">
+          서로의 코드를 연결하면 프로그램을 시작할 수 있어요.
+        </p>
 
         {/* 내 코드 발급 */}
         <div style={{ margin: "18px 0" }}>
-          <button className="btn big" onClick={onIssue}>내 커플 코드 발급</button>
+          <button className="btn big" onClick={onIssue} disabled={busy}>
+            내 커플 코드 발급
+          </button>
           {myCode && (
             <div style={{ marginTop: 10, fontWeight: 700, color: "#6c4f3d" }}>
               내 코드: <span style={{ fontFamily: "monospace" }}>{myCode}</span>
@@ -116,8 +135,11 @@ const CoupleConnectPage = () => {
               textAlign: "center",
               marginRight: 8,
             }}
+            disabled={busy}
           />
-          <button className="btn big" onClick={onConnect}>연결하기</button>
+          <button className="btn big" onClick={onConnect} disabled={busy}>
+            연결하기
+          </button>
         </div>
 
         {msg && (
